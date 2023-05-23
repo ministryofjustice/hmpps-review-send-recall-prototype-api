@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 
-class OffenderPage(driver: WebDriver) {
+class OffenderPage(private val driver: WebDriver) {
 
   @FindBy(id = "cntDetails_txtCRO_PNC")
   private val croNumberInput: WebElement? = null
@@ -28,7 +28,11 @@ class OffenderPage(driver: WebDriver) {
   }
 
   fun extractOffenderDetails(): PpudClient.Offender {
+    val idMatch = Regex(".+?data=(.+)").find(driver.currentUrl)!!
+    val (id) = idMatch.destructured
+
     return PpudClient.Offender(
+      id = id,
       croNumber = croNumberInput.getValue(),
       nomsId = nomsIdInput.getValue(),
       firstNames = firstNamesInput.getValue(),

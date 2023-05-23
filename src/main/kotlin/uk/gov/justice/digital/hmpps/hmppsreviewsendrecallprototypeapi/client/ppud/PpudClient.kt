@@ -37,12 +37,10 @@ class PpudClient(
 
       logIn()
 
-      var resultLinks = searchUntilFound(croNumber, nomsId, familyName, dateOfBirth)
+      val resultLinks = searchUntilFound(croNumber, nomsId, familyName, dateOfBirth)
       // Thread.sleep(3000)
 
-      val matchedOffenders = resultLinks.map { extractOffenderDetail(it) }
-
-      return matchedOffenders
+      return resultLinks.map { extractOffenderDetail(it) }
     } finally {
       driver.close()
     }
@@ -106,6 +104,7 @@ class PpudClient(
   }
 
   data class Offender(
+    val id: String,
     val croNumber: String,
     val nomsId: String,
     val firstNames: String,

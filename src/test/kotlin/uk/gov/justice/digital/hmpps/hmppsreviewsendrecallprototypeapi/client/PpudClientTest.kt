@@ -54,6 +54,16 @@ class PpudClientTest {
   }
 
   @Test
+  fun `Given search criteria for existing offender when searching for an offender then returned offender includes unique identifier`() {
+    val nomsId = "A8273DJ"
+    val expectedId = "4F6666656E64657269643D313230323533G709H667"
+    val results = searchForOffender(nomsId = nomsId)
+    assertThat(results.size, equalTo(1))
+    val actualOffender = results.first()
+    assertThat(actualOffender.id, equalTo(expectedId))
+  }
+
+  @Test
   fun `Given non existent details when searching for an offender then empty list is returned`() {
     val results = searchForOffender(
       "MissingCRO",
