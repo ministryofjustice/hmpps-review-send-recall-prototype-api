@@ -1,7 +1,11 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client
 
+import com.natpryce.hamkrest.allElements
 import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.caseInsensitive
+import com.natpryce.hamkrest.containsSubstring
 import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.greaterThan
 import com.natpryce.hamkrest.isEmpty
 import org.junit.jupiter.api.Test
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
@@ -58,6 +62,15 @@ class PpudClientTest {
       "MissingDateOfBirth",
     )
     assertThat(results, isEmpty)
+  }
+
+  @Test
+  fun `Given non unique details when searching for an offender then all matches are returned`() {
+    val nomsId = "AB"
+    val results = searchForOffender(nomsId = nomsId)
+    assertThat(results.size, greaterThan(1))
+    val nomsIds = results.map { it.nomsId }
+    assertThat(nomsIds, allElements(containsSubstring(nomsId).caseInsensitive()))
   }
 
   private fun searchForOffender(

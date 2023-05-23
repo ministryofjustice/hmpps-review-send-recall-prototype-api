@@ -6,10 +6,13 @@ import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 
-class OffenderPage(private val driver: WebDriver) {
+class OffenderPage(driver: WebDriver) {
 
   @FindBy(id = "cntDetails_txtCRO_PNC")
   private val croNumberInput: WebElement? = null
+
+  @FindBy(id = "cntDetails_txtNOMS_ID")
+  private val nomsIdInput: WebElement? = null
 
   @FindBy(id = "cntDetails_txtFIRST_NAMES")
   private val firstNamesInput: WebElement? = null
@@ -26,11 +29,15 @@ class OffenderPage(private val driver: WebDriver) {
 
   fun extractOffenderDetails(): PpudClient.Offender {
     return PpudClient.Offender(
-      croNumber = croNumberInput?.getAttribute("value")?.trim() ?: "",
-      nomsId = "",
-      firstNames = firstNamesInput?.getAttribute("value")?.trim() ?: "",
-      familyName = familyNameInput?.getAttribute("value")?.trim() ?: "",
-      dateOfBirth = dateOfBirthInput?.getAttribute("value")?.trim() ?: "",
+      croNumber = croNumberInput.getValue(),
+      nomsId = nomsIdInput.getValue(),
+      firstNames = firstNamesInput.getValue(),
+      familyName = familyNameInput.getValue(),
+      dateOfBirth = dateOfBirthInput.getValue(),
     )
   }
+}
+
+private fun WebElement?.getValue(): String {
+  return this?.getAttribute("value")?.trim() ?: ""
 }
