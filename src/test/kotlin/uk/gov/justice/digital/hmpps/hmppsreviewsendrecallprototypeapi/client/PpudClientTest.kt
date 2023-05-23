@@ -7,14 +7,22 @@ import com.natpryce.hamkrest.containsSubstring
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThan
 import com.natpryce.hamkrest.isEmpty
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PpudClientTest {
 
   private val ppudUrl = "https://uat.ppud.justice.gov.uk/"
 
-  private val ppudClient: PpudClient = PpudClient(ppudUrl)
+  private val ppudClient: PpudClient = PpudClient()
+
+  @BeforeAll
+  fun beforeAll() {
+    ppudClient.ppudUrl = ppudUrl
+  }
 
   @Test
   fun `Given an existing NOMS ID when searching for an offender then details are returned`() {

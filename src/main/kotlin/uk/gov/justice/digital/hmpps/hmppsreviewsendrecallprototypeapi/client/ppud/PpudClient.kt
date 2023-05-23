@@ -4,36 +4,30 @@ import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
 import org.yaml.snakeyaml.error.MissingEnvironmentVariableException
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.OffenderPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.SearchPage
 
-class PpudClient(
-  private val ppudUrl: String,
-) {
+@Component
+class PpudClient {
 
-  private val driver: WebDriver
+  private lateinit var driver: WebDriver
 
-  init {
-
-    // Needed to address failure to establish WebSocket in Chrome 111+
-    // https://stackoverflow.com/questions/75718422/org-openqa-selenium-remote-http-connectionfailedexception-unable-to-establish-w
-    val options = ChromeOptions()
-    options.addArguments("--remote-allow-origins=*")
-//    options.setHeadless(true)
-    driver = WebDriverManager.chromedriver().capabilities(options).create()
-  }
+  var ppudUrl: String = ""
 
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
   }
 
   fun searchForOffender(croNumber: String, nomsId: String, familyName: String, dateOfBirth: String): List<Offender> {
-    try {
-      driver.get(ppudUrl)
+    log.info("Searching for CRO Number: '$croNumber' NomsId: '$nomsId' Family Name: '$familyName' Date of Birth: '$dateOfBirth'")
 
-      log.info("Searching for CRO Number: '$croNumber' NomsId: '$nomsId' Family Name: '$familyName' Date of Birth: '$dateOfBirth'")
+    try {
+      initialiseDriver()
+
+      driver.get(ppudUrl)
 
       logIn()
 
@@ -44,6 +38,15 @@ class PpudClient(
     } finally {
       driver.close()
     }
+  }
+
+  private fun initialiseDriver() {
+    // Needed to address failure to establish WebSocket in Chrome 111+
+    // https://stackoverflow.com/questions/75718422/org-openqa-selenium-remote-http-connectionfailedexception-unable-to-establish-w
+    val options = ChromeOptions()
+    options.addArguments("--remote-allow-origins=*")
+//    options.setHeadless(true)
+    driver = WebDriverManager.chromedriver().capabilities(options).create()
   }
 
   private fun logIn() {

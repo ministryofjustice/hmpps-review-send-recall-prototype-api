@@ -13,6 +13,9 @@ dependencies {
   implementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.0")
   implementation("io.github.bonigarcia:webdrivermanager:5.2.3")
 
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
   testImplementation("com.natpryce:hamkrest:1.8.0.1")
 }
 
