@@ -9,6 +9,11 @@ configurations {
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
+  implementation("org.seleniumhq.selenium:selenium-java:4.9.0")
+  implementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.0")
+  implementation("io.github.bonigarcia:webdrivermanager:5.2.3")
+
+  testImplementation("com.natpryce:hamkrest:1.8.0.1")
 }
 
 java {
