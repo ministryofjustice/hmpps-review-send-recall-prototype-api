@@ -11,6 +11,9 @@ import java.time.Duration
 
 class SearchPage(private val driver: WebDriver) {
 
+  @FindBy(linkText = "New Offender")
+  private val newOffenderLink: WebElement? = null
+
   @FindBy(id = "content_txtCROPNC")
   private val croNumberInput: WebElement? = null
 
@@ -37,6 +40,10 @@ class SearchPage(private val driver: WebDriver) {
 
   init {
     PageFactory.initElements(driver, this)
+  }
+
+  fun gotoNewOffenderPage() {
+    newOffenderLink?.click()
   }
 
   fun searchByCroNumber(croNumber: String = "") {

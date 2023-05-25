@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.yaml.snakeyaml.error.MissingEnvironmentVariableException
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.NewOffenderPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.OffenderPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.SearchPage
 
@@ -35,6 +36,31 @@ class PpudClient {
       // Thread.sleep(3000)
 
       return resultLinks.map { extractOffenderDetail(it) }
+    } finally {
+      driver.close()
+    }
+  }
+
+  fun createOffender(newOffender: NewOffender): Offender {
+    log.info("Creating new offender $newOffender")
+
+    try {
+      initialiseDriver()
+
+      driver.get(ppudUrl)
+
+      logIn()
+
+      val searchPage = SearchPage(driver).verifyOn()
+      searchPage.gotoNewOffenderPage()
+      val newOffenderPage = NewOffenderPage(driver).verifyOn()
+      newOffenderPage.createOffender(newOffender)
+      Thread.sleep(5000)
+
+      newOffenderPage.throwIfInvalid()
+
+      val offenderPage = OffenderPage(driver)
+      return offenderPage.extractOffenderDetails()
     } finally {
       driver.close()
     }
@@ -113,5 +139,21 @@ class PpudClient {
     val firstNames: String,
     val familyName: String,
     val dateOfBirth: String,
+  )
+
+  data class NewOffender(
+    val croNumber: String,
+    val nomsId: String?,
+    val firstNames: String,
+    val familyName: String,
+    val dateOfBirth: String,
+    val indexOffence: String,
+    val mappaLevel: String,
+    val prisonNumber: String,
+    val ethnicity: String,
+    val gender: String,
+    val dateOfSentence: String,
+    val sentencingCourt: String? = null,
+    val sentencedUnder: String? = null,
   )
 }
