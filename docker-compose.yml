@@ -3,7 +3,8 @@ services:
   hmpps-review-send-recall-prototype-api:
     build:
       context: .
-    network_mode: "host"
+    networks:
+      - hmpps
     container_name: hmpps-review-send-recall-prototype-api
     ports:
       - "8081:8080"
