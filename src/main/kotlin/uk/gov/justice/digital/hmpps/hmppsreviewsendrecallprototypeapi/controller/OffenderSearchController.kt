@@ -21,6 +21,7 @@ internal class OffenderSearchController(
 
   @GetMapping("/search")
   suspend fun search(
+    @RequestParam(required = false) sleepDuration: Long?,
     @RequestParam(required = false) croNumber: String?,
     @RequestParam(required = false) nomsId: String?,
     @RequestParam(required = false) familyName: String?,
@@ -28,6 +29,7 @@ internal class OffenderSearchController(
   ): List<PpudClient.Offender> {
     log.info(normalizeSpace("Offender search endpoint hit"))
     ppudClient.ppudUrl = "https://uat.ppud.justice.gov.uk/"
+    ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
     return ppudClient.searchForOffender(
       croNumber = croNumber ?: "",
       nomsId = nomsId ?: "",

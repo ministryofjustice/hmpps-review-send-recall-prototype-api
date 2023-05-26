@@ -18,6 +18,8 @@ class PpudClient {
 
   var ppudUrl: String = ""
 
+  var sleepDurationInMilliseconds: Long = 0
+
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
   }
@@ -29,11 +31,12 @@ class PpudClient {
       initialiseDriver()
 
       driver.get(ppudUrl)
+      sleepIfRequired()
 
       logIn()
 
       val resultLinks = searchUntilFound(croNumber, nomsId, familyName, dateOfBirth)
-      // Thread.sleep(3000)
+      sleepIfRequired()
 
       return resultLinks.map { extractOffenderDetail(it) }
     } finally {
@@ -48,18 +51,20 @@ class PpudClient {
       initialiseDriver()
 
       driver.get(ppudUrl)
+      sleepIfRequired()
 
       logIn()
 
       val searchPage = SearchPage(driver).verifyOn()
       searchPage.gotoNewOffenderPage()
+      sleepIfRequired()
       val newOffenderPage = NewOffenderPage(driver).verifyOn()
       newOffenderPage.createOffender(newOffender)
-      Thread.sleep(5000)
 
       newOffenderPage.throwIfInvalid()
 
       val offenderPage = OffenderPage(driver)
+      sleepIfRequired()
       return offenderPage.extractOffenderDetails()
     } finally {
       driver.close()
@@ -94,11 +99,14 @@ class PpudClient {
     val searchPage = SearchPage(driver).verifyOn()
 
     searchByCroNumberIfPresent(searchPage, croNumber)
+    sleepIfRequired()
     if (searchPage.searchResultsCount() == 0) {
       searchByNomsIdIfPresent(searchPage, nomsId)
+      sleepIfRequired()
 
       if (searchPage.searchResultsCount() == 0) {
         searchByPersonalDetailsIfPresent(searchPage, familyName, dateOfBirth)
+        sleepIfRequired()
       }
     }
 
@@ -107,6 +115,7 @@ class PpudClient {
 
   private fun extractOffenderDetail(url: String): Offender {
     driver.get(url)
+    sleepIfRequired()
     val offenderPage = OffenderPage(driver)
     return offenderPage.extractOffenderDetails()
   }
@@ -130,6 +139,10 @@ class PpudClient {
       searchPage.clearFields()
       searchPage.searchByPersonalDetails(familyName, dateOfBirth)
     }
+  }
+
+  private fun sleepIfRequired() {
+    Thread.sleep(sleepDurationInMilliseconds)
   }
 
   data class Offender(

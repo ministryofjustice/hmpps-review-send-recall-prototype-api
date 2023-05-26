@@ -6,6 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 
@@ -21,10 +22,12 @@ internal class OffenderCreateController(
 
   @PostMapping("/create", "text/plain")
   suspend fun create(
+    @RequestParam(required = false) sleepDuration: Long?,
     @RequestBody(required = true) newOffender: PpudClient.NewOffender,
   ): PpudClient.Offender {
     log.info(normalizeSpace("Offender create endpoint hit"))
     ppudClient.ppudUrl = "https://uat.ppud.justice.gov.uk/"
+    ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
     return ppudClient.createOffender(newOffender)
   }
 }
