@@ -2,7 +2,7 @@ package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.pp
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.firefox.FirefoxOptions
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.yaml.snakeyaml.error.MissingEnvironmentVariableException
@@ -27,9 +27,9 @@ class PpudClient {
   fun searchForOffender(croNumber: String, nomsId: String, familyName: String, dateOfBirth: String): List<Offender> {
     log.info("Searching for CRO Number: '$croNumber' NomsId: '$nomsId' Family Name: '$familyName' Date of Birth: '$dateOfBirth'")
 
-    try {
-      initialiseDriver()
+    initialiseDriver()
 
+    try {
       driver.get(ppudUrl)
       sleepIfRequired()
 
@@ -39,6 +39,9 @@ class PpudClient {
       sleepIfRequired()
 
       return resultLinks.map { extractOffenderDetail(it) }
+    } catch (e: Exception) {
+      log.error("Exception searching for offender.", e)
+      throw e
     } finally {
       driver.close()
     }
@@ -74,10 +77,22 @@ class PpudClient {
   private fun initialiseDriver() {
     // Needed to address failure to establish WebSocket in Chrome 111+
     // https://stackoverflow.com/questions/75718422/org-openqa-selenium-remote-http-connectionfailedexception-unable-to-establish-w
-    val options = ChromeOptions()
-    options.addArguments("--remote-allow-origins=*")
-//    options.setHeadless(true)
-    driver = WebDriverManager.chromedriver().capabilities(options).create()
+    //    val options = ChromeOptions()
+    //    options.addArguments("--remote-allow-origins=*")
+    //    driver = WebDriverManager.chromedriver().capabilities(options).create()
+
+    val options = FirefoxOptions()
+    val binary = System.getenv("HMPPS_RSR_FIREFOX_BINARY")
+    if (!binary.isNullOrBlank()) {
+      options.setBinary(binary)
+    }
+
+    val headless = System.getenv("HMPPS_RSR_HEADLESS").toBoolean()
+    if (headless) {
+      options.setHeadless(true)
+    }
+
+    driver = WebDriverManager.firefoxdriver().capabilities(options).create()
   }
 
   private fun logIn() {
