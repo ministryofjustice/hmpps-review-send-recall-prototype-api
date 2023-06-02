@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import org.yaml.snakeyaml.error.MissingEnvironmentVariableException
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.NewOffenderPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.OffenderPage
@@ -98,9 +97,9 @@ class PpudClient {
   private fun logIn() {
     val loginPage = LoginPage(driver).verifyOn()
     val userName = System.getenv("HMPPS_PPUD_UAT_USERNAME")
-      ?: throw MissingEnvironmentVariableException("Username environment variable not set")
+      ?: throw Exception("Username environment variable not set")
     val password = System.getenv("HMPPS_PPUD_UAT_PASSWORD")
-      ?: throw MissingEnvironmentVariableException("Password environment variable not set")
+      ?: throw Exception("Password environment variable not set")
 
     loginPage.login(userName, password)
   }
