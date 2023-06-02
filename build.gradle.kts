@@ -9,9 +9,11 @@ configurations {
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
-  implementation("org.seleniumhq.selenium:selenium-java:4.9.0")
-  implementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.0")
+  implementation("org.seleniumhq.selenium:selenium-java:4.9.1")
+  implementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.1")
   implementation("io.github.bonigarcia:webdrivermanager:5.2.3")
+  implementation("commons-io:commons-io:2.7") // Address CVE-2021-29425
+  implementation("org.bouncycastle:bcprov-jdk15on:1.67") // Address CVE-2020-15522
 
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
