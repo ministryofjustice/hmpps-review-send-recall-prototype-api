@@ -31,20 +31,13 @@ internal class OffenderController() {
     @RequestParam(required = false) dateOfBirth: String?,
   ): List<PpudClient.Offender> {
     log.info(normalizeSpace("Offender search endpoint hit"))
-    val driver = initialiseDriver()
-    try {
-      val ppudClient = PpudClient()
-      ppudClient.driver = driver
-      ppudClient.ppudUrl = ppudUrl
-      ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
-      return ppudClient.searchForOffender(
+    return performClientOperation(sleepDuration) { ppudClient ->
+      ppudClient.searchForOffender(
         croNumber = croNumber ?: "",
         nomsId = nomsId ?: "",
         familyName = familyName ?: "",
         dateOfBirth = dateOfBirth ?: "",
       )
-    } finally {
-      driver.close()
     }
   }
 
@@ -54,15 +47,23 @@ internal class OffenderController() {
     @RequestBody(required = true) newOffender: PpudClient.NewOffender,
   ): PpudClient.Offender {
     log.info(normalizeSpace("Offender create endpoint hit"))
+    return performClientOperation(sleepDuration) { ppudClient ->
+      ppudClient.createOffender(newOffender)
+    }
+  }
+
+  suspend fun <T> performClientOperation(sleepDuration: Long?, operation: (ppudClient: PpudClient) -> T): T {
     val driver = initialiseDriver()
     try {
+      log.info("Starting performClientOperation")
       val ppudClient = PpudClient()
       ppudClient.driver = driver
       ppudClient.ppudUrl = ppudUrl
       ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
-      return ppudClient.createOffender(newOffender)
+      return operation(ppudClient)
     } finally {
       driver.close()
+      log.info("Finally of performClientOperation")
     }
   }
 }
