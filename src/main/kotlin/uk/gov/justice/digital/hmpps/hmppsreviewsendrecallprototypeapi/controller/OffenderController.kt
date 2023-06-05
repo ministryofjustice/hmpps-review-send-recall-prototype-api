@@ -3,14 +3,20 @@ package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.controlle
 import org.apache.commons.lang3.StringUtils.normalizeSpace
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.initialiseDriver
 
 @RestController
 @RequestMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-internal class OffenderController(
-  private val ppudClient: PpudClient,
-) {
+internal class OffenderController() {
+
+  val ppudUrl = "https://uat.ppud.justice.gov.uk/"
 
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -25,14 +31,21 @@ internal class OffenderController(
     @RequestParam(required = false) dateOfBirth: String?,
   ): List<PpudClient.Offender> {
     log.info(normalizeSpace("Offender search endpoint hit"))
-    ppudClient.ppudUrl = "https://uat.ppud.justice.gov.uk/"
-    ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
-    return ppudClient.searchForOffender(
-      croNumber = croNumber ?: "",
-      nomsId = nomsId ?: "",
-      familyName = familyName ?: "",
-      dateOfBirth = dateOfBirth ?: "",
-    )
+    val driver = initialiseDriver()
+    try {
+      val ppudClient = PpudClient()
+      ppudClient.driver = driver
+      ppudClient.ppudUrl = ppudUrl
+      ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
+      return ppudClient.searchForOffender(
+        croNumber = croNumber ?: "",
+        nomsId = nomsId ?: "",
+        familyName = familyName ?: "",
+        dateOfBirth = dateOfBirth ?: "",
+      )
+    } finally {
+      driver.close()
+    }
   }
 
   @PostMapping("/create", "text/plain")
@@ -41,8 +54,15 @@ internal class OffenderController(
     @RequestBody(required = true) newOffender: PpudClient.NewOffender,
   ): PpudClient.Offender {
     log.info(normalizeSpace("Offender create endpoint hit"))
-    ppudClient.ppudUrl = "https://uat.ppud.justice.gov.uk/"
-    ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
-    return ppudClient.createOffender(newOffender)
+    val driver = initialiseDriver()
+    try {
+      val ppudClient = PpudClient()
+      ppudClient.driver = driver
+      ppudClient.ppudUrl = ppudUrl
+      ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
+      return ppudClient.createOffender(newOffender)
+    } finally {
+      driver.close()
+    }
   }
 }

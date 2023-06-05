@@ -1,8 +1,6 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud
 
-import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.firefox.FirefoxOptions
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
@@ -13,7 +11,7 @@ import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppu
 @Component
 class PpudClient {
 
-  private lateinit var driver: WebDriver
+  lateinit var driver: WebDriver
 
   var ppudUrl: String = ""
 
@@ -25,8 +23,6 @@ class PpudClient {
 
   fun searchForOffender(croNumber: String, nomsId: String, familyName: String, dateOfBirth: String): List<Offender> {
     log.info("Searching for CRO Number: '$croNumber' NomsId: '$nomsId' Family Name: '$familyName' Date of Birth: '$dateOfBirth'")
-
-    initialiseDriver()
 
     try {
       driver.get(ppudUrl)
@@ -41,8 +37,6 @@ class PpudClient {
     } catch (e: Exception) {
       log.error("Exception searching for offender.", e)
       throw e
-    } finally {
-      driver.close()
     }
   }
 
@@ -50,8 +44,6 @@ class PpudClient {
     log.info("Creating new offender $newOffender")
 
     try {
-      initialiseDriver()
-
       driver.get(ppudUrl)
       sleepIfRequired()
 
@@ -68,30 +60,10 @@ class PpudClient {
       val offenderPage = OffenderPage(driver)
       sleepIfRequired()
       return offenderPage.extractOffenderDetails()
-    } finally {
-      driver.close()
+    } catch (e: Exception) {
+      log.error("Exception creating new offender.", e)
+      throw e
     }
-  }
-
-  private fun initialiseDriver() {
-    // Needed to address failure to establish WebSocket in Chrome 111+
-    // https://stackoverflow.com/questions/75718422/org-openqa-selenium-remote-http-connectionfailedexception-unable-to-establish-w
-    //    val options = ChromeOptions()
-    //    options.addArguments("--remote-allow-origins=*")
-    //    driver = WebDriverManager.chromedriver().capabilities(options).create()
-
-    val options = FirefoxOptions()
-    val binary = System.getenv("HMPPS_RSR_FIREFOX_BINARY")
-    if (!binary.isNullOrBlank()) {
-      options.setBinary(binary)
-    }
-
-    val headless = System.getenv("HMPPS_RSR_HEADLESS").toBoolean()
-    if (headless) {
-      options.setHeadless(true)
-    }
-
-    driver = WebDriverManager.firefoxdriver().capabilities(options).create()
   }
 
   private fun logIn() {

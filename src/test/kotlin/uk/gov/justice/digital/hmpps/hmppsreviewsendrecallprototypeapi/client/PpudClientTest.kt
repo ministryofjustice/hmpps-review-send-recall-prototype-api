@@ -9,10 +9,12 @@ import com.natpryce.hamkrest.greaterThan
 import com.natpryce.hamkrest.isEmpty
 import com.natpryce.hamkrest.isNullOrBlank
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.initialiseDriver
 import java.util.UUID
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -20,11 +22,18 @@ class PpudClientTest {
 
   private val ppudUrl = "https://uat.ppud.justice.gov.uk/"
 
-  private val ppudClient: PpudClient = PpudClient()
+  private lateinit var ppudClient: PpudClient
 
-  @BeforeAll
-  fun beforeAll() {
+  @BeforeEach
+  fun beforeEach() {
+    ppudClient = PpudClient()
+    ppudClient.driver = initialiseDriver()
     ppudClient.ppudUrl = ppudUrl
+  }
+
+  @AfterEach
+  fun afterEach() {
+    ppudClient.driver.close()
   }
 
   @Test
