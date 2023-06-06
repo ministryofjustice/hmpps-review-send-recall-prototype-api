@@ -25,17 +25,18 @@ class PpudClientTest {
   private lateinit var ppudClient: PpudClient
 
   @BeforeEach
-  fun beforeEach() {
+  fun before() {
     ppudClient = PpudClient(ppudUrl, sleepDurationInMilliseconds = 0)
   }
 
   @AfterEach
-  fun afterEach() {
-    ppudClient.close()
+  fun after() {
+    ppudClient.quit()
   }
 
   @Test
   fun `Given an existing NOMS ID when searching for an offender then details are returned`() {
+    ppudClient = PpudClient(ppudUrl, sleepDurationInMilliseconds = 0)
     val nomsId = "A8273DJ"
     val expectedFirstNames = "Daisy"
     val expectedFamilyName = "Owens"

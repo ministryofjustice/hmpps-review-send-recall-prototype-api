@@ -64,7 +64,7 @@ internal class OffenderController {
     try {
       return operation(ppudClient)
     } finally {
-      ppudClient.close()
+      ppudClient.quit()
       log.info("Finally of performClientOperation $identifier")
     }
   }

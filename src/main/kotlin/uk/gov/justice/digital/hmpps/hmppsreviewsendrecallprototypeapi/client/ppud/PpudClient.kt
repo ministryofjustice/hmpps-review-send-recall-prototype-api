@@ -61,8 +61,8 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     }
   }
 
-  fun close() {
-    driver.close()
+  fun quit() {
+    driver.quit()
   }
 
   private fun logIn() {
