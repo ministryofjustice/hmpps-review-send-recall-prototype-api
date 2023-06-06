@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages
 
+import kotlinx.coroutines.delay
 import org.openqa.selenium.By
 import org.openqa.selenium.NoAlertPresentException
 import org.openqa.selenium.WebDriver
@@ -73,9 +74,6 @@ class NewOffenderPage(private val driver: WebDriver) {
   @FindBy(id = "content_ddliSENTENCED_UNDER")
   private val sentencedUnderDropdown: WebElement? = null
 
-  @FindBy(id = "content_txtCRO_PNC")
-  private val croNumberInput: WebElement? = null
-
   init {
     PageFactory.initElements(driver, this)
   }
@@ -86,7 +84,7 @@ class NewOffenderPage(private val driver: WebDriver) {
     return this
   }
 
-  fun createOffender(newOffender: PpudClient.NewOffender) {
+  suspend fun createOffender(newOffender: PpudClient.NewOffender) {
     // Complete these first as they trigger additional processing
     indexOffenceInput?.click()
     indexOffenceInput?.sendKeys(newOffender.indexOffence)
@@ -113,7 +111,7 @@ class NewOffenderPage(private val driver: WebDriver) {
 
     // Complete fields that have been updated/refreshed.
     // This is a hacky solution but will do for now
-    Thread.sleep(2000)
+    delay(2000)
     setDropdownOptionIfNotBlank(indexOffenceDropdown, newOffender.indexOffence)
     setDropdownOptionIfNotBlank(mappaLevelDropdown, newOffender.mappaLevel)
 

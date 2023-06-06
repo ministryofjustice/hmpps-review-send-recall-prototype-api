@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud
 
+import kotlinx.coroutines.delay
 import org.openqa.selenium.WebDriver
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -21,7 +22,7 @@ class PpudClient {
     private val log = LoggerFactory.getLogger(this::class.java)
   }
 
-  fun searchForOffender(croNumber: String, nomsId: String, familyName: String, dateOfBirth: String): List<Offender> {
+  suspend fun searchForOffender(croNumber: String, nomsId: String, familyName: String, dateOfBirth: String): List<Offender> {
     log.info("Searching for CRO Number: '$croNumber' NomsId: '$nomsId' Family Name: '$familyName' Date of Birth: '$dateOfBirth'")
 
     try {
@@ -40,7 +41,7 @@ class PpudClient {
     }
   }
 
-  fun createOffender(newOffender: NewOffender): Offender {
+  suspend fun createOffender(newOffender: NewOffender): Offender {
     log.info("Creating new offender $newOffender")
 
     try {
@@ -76,7 +77,7 @@ class PpudClient {
     loginPage.login(userName, password)
   }
 
-  private fun searchUntilFound(
+  private suspend fun searchUntilFound(
     croNumber: String,
     nomsId: String,
     familyName: String,
@@ -99,7 +100,7 @@ class PpudClient {
     return searchPage.searchResultsLinks()
   }
 
-  private fun extractOffenderDetail(url: String): Offender {
+  private suspend fun extractOffenderDetail(url: String): Offender {
     driver.get(url)
     sleepIfRequired()
     val offenderPage = OffenderPage(driver)
@@ -127,8 +128,8 @@ class PpudClient {
     }
   }
 
-  private fun sleepIfRequired() {
-    Thread.sleep(sleepDurationInMilliseconds)
+  private suspend fun sleepIfRequired() {
+    delay(sleepDurationInMilliseconds)
   }
 
   data class Offender(

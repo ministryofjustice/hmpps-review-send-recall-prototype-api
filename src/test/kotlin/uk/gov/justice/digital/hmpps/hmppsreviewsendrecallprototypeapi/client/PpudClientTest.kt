@@ -8,6 +8,7 @@ import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThan
 import com.natpryce.hamkrest.isEmpty
 import com.natpryce.hamkrest.isNullOrBlank
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -120,8 +121,9 @@ class PpudClientTest {
       sentencingCourt = "Sheffield",
       sentencedUnder = "CJA 1991",
     )
-    val result = ppudClient.createOffender(newOffender)
-
+    val result = runBlocking {
+      ppudClient.createOffender(newOffender)
+    }
     assertThat(result.id, isNullOrBlank.not())
     assertThat(result.id.length, equalTo(42))
     assertThat(result.familyName, equalTo(newOffender.familyName))
@@ -143,7 +145,9 @@ class PpudClientTest {
       dateOfSentence = "",
     )
     assertThatThrownBy {
-      ppudClient.createOffender(newOffender)
+      runBlocking {
+        ppudClient.createOffender(newOffender)
+      }
     }.isInstanceOf(Exception::class.java)
       .hasMessageContaining("Validation Failed.")
       .hasMessageContaining("You must enter a first name.")
@@ -155,6 +159,8 @@ class PpudClientTest {
     familyName: String = "",
     dateOfBirth: String = "",
   ): List<PpudClient.Offender> {
-    return ppudClient.searchForOffender(croNumber, nomsId, familyName, dateOfBirth)
+    return runBlocking {
+      ppudClient.searchForOffender(croNumber, nomsId, familyName, dateOfBirth)
+    }
   }
 }
