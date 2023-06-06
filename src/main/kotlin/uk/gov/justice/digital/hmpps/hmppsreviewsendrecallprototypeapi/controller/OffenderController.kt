@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.initialiseDriver
-import java.util.UUID
+import java.util.*
 
 @RestController
 @RequestMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -49,7 +48,7 @@ internal class OffenderController {
     @RequestBody(required = true) newOffender: PpudClient.NewOffender,
   ): PpudClient.Offender {
     val identifier = UUID.randomUUID()
-    log.info(normalizeSpace("Offender create endpoint hit"))
+    log.info(normalizeSpace("Offender create endpoint hit $identifier"))
     return performClientOperation(sleepDuration, identifier) { ppudClient ->
       ppudClient.createOffender(newOffender)
     }
@@ -60,16 +59,12 @@ internal class OffenderController {
     identifier: UUID?,
     operation: suspend (ppudClient: PpudClient) -> T,
   ): T {
-    val driver = initialiseDriver()
+    log.info("Starting performClientOperation $identifier")
+    val ppudClient = PpudClient(ppudUrl, sleepDuration ?: 0)
     try {
-      log.info("Starting performClientOperation $identifier")
-      val ppudClient = PpudClient()
-      ppudClient.driver = driver
-      ppudClient.ppudUrl = ppudUrl
-      ppudClient.sleepDurationInMilliseconds = sleepDuration ?: 0
       return operation(ppudClient)
     } finally {
-      driver.close()
+      ppudClient.close()
       log.info("Finally of performClientOperation $identifier")
     }
   }

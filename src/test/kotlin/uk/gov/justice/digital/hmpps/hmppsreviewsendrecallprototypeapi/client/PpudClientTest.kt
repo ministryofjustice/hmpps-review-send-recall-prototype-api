@@ -15,8 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.initialiseDriver
-import java.util.UUID
+import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PpudClientTest {
@@ -27,14 +26,12 @@ class PpudClientTest {
 
   @BeforeEach
   fun beforeEach() {
-    ppudClient = PpudClient()
-    ppudClient.driver = initialiseDriver()
-    ppudClient.ppudUrl = ppudUrl
+    ppudClient = PpudClient(ppudUrl, sleepDurationInMilliseconds = 0)
   }
 
   @AfterEach
   fun afterEach() {
-    ppudClient.driver.close()
+    ppudClient.close()
   }
 
   @Test

@@ -3,20 +3,14 @@ package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.pp
 import kotlinx.coroutines.delay
 import org.openqa.selenium.WebDriver
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.NewOffenderPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.OffenderPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.SearchPage
 
-@Component
-class PpudClient {
+class PpudClient(private val ppudUrl: String, private val sleepDurationInMilliseconds: Long) {
 
-  lateinit var driver: WebDriver
-
-  var ppudUrl: String = ""
-
-  var sleepDurationInMilliseconds: Long = 0
+  private val driver: WebDriver = initialiseDriver()
 
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -65,6 +59,10 @@ class PpudClient {
       log.error("Exception creating new offender.", e)
       throw e
     }
+  }
+
+  fun close() {
+    driver.close()
   }
 
   private fun logIn() {
