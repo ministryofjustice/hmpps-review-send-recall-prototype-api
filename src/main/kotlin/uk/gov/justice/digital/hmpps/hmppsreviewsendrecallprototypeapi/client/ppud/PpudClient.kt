@@ -16,7 +16,12 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     private val log = LoggerFactory.getLogger(this::class.java)
   }
 
-  suspend fun searchForOffender(croNumber: String, nomsId: String, familyName: String, dateOfBirth: String): List<Offender> {
+  suspend fun searchForOffender(
+    croNumber: String,
+    nomsId: String,
+    familyName: String,
+    dateOfBirth: String,
+  ): List<Offender> {
     log.info("Searching for CRO Number: '$croNumber' NomsId: '$nomsId' Family Name: '$familyName' Date of Birth: '$dateOfBirth'")
 
     try {
@@ -61,7 +66,7 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     }
   }
 
-  suspend fun createRecall(newRecall: NewRecall) : Recall {
+  suspend fun createRecall(newRecall: NewRecall): Recall {
     log.info("Creating new recall: $newRecall")
 
     try {
@@ -87,10 +92,8 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
 
   private fun logIn() {
     val loginPage = LoginPage(driver).verifyOn()
-    val userName = System.getenv("HMPPS_PPUD_USERNAME")
-      ?: throw Exception("Username environment variable not set")
-    val password = System.getenv("HMPPS_PPUD_PASSWORD")
-      ?: throw Exception("Password environment variable not set")
+    val userName = System.getenv("HMPPS_PPUD_USERNAME") ?: throw Exception("Username environment variable not set")
+    val password = System.getenv("HMPPS_PPUD_PASSWORD") ?: throw Exception("Password environment variable not set")
 
     loginPage.login(userName, password)
   }
@@ -191,8 +194,8 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     val isPartAMissing: Boolean,
     val isOASysMissing: Boolean,
     val isPreSentenceReportMissing: Boolean,
-    val isPreConsMissing : Boolean,
+    val isPreConsMissing: Boolean,
     val isLicenceMissing: Boolean,
-    val isChargeSheetMissing: Boolean
+    val isChargeSheetMissing: Boolean,
   )
 }

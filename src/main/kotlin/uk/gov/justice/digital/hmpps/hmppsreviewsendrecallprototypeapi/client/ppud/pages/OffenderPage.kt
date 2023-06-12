@@ -41,7 +41,7 @@ class OffenderPage(private val driver: WebDriver) {
     )
   }
 
-  fun navigateTo(ppudUrl:String, offenderId: String) {
+  fun navigateTo(ppudUrl: String, offenderId: String) {
     driver.get("$ppudUrl/Offender/PersonalDetails.aspx?data=$offenderId")
   }
 }
