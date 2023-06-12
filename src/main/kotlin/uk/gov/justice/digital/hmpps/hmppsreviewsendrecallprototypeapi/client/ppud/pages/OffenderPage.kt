@@ -40,6 +40,10 @@ class OffenderPage(private val driver: WebDriver) {
       dateOfBirth = dateOfBirthInput.getValue(),
     )
   }
+
+  fun navigateTo(ppudUrl:String, offenderId: String) {
+    driver.get("$ppudUrl/Offender/PersonalDetails.aspx?data=$offenderId")
+  }
 }
 
 private fun WebElement?.getValue(): String {

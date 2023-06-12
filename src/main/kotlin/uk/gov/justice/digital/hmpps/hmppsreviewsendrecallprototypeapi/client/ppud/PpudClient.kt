@@ -61,6 +61,26 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     }
   }
 
+  suspend fun createRecall(newRecall: NewRecall) : Recall {
+    log.info("Creating new recall: $newRecall")
+
+    try {
+      driver.get(ppudUrl)
+      sleepIfRequired()
+
+      logIn()
+
+      val offenderPage = OffenderPage(driver)
+      offenderPage.navigateTo(ppudUrl, newRecall.offenderId)
+      sleepIfRequired()
+
+      return Recall("")
+    } catch (e: Exception) {
+      log.error("Exception creating new recall.", e)
+      throw e
+    }
+  }
+
   fun quit() {
     driver.quit()
   }
@@ -139,6 +159,10 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     val dateOfBirth: String,
   )
 
+  data class Recall(
+    val id: String,
+  )
+
   data class NewOffender(
     val croNumber: String,
     val nomsId: String?,
@@ -153,5 +177,22 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     val dateOfSentence: String,
     val sentencingCourt: String? = null,
     val sentencedUnder: String? = null,
+  )
+
+  data class NewRecall(
+    val offenderId: String,
+    val sentenceDate: String,
+    val releaseDate: String,
+    val isInCustody: Boolean,
+    val decisionDateTime: String,
+    val receivedDateTime: String,
+    val recommendedToOwner: String,
+    val policeForce: String,
+    val isPartAMissing: Boolean,
+    val isOASysMissing: Boolean,
+    val isPreSentenceReportMissing: Boolean,
+    val isPreConsMissing : Boolean,
+    val isLicenceMissing: Boolean,
+    val isChargeSheetMissing: Boolean
   )
 }

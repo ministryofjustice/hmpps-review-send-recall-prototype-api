@@ -42,7 +42,7 @@ internal class OffenderController {
     }
   }
 
-  @PostMapping("/create", "text/plain")
+  @PostMapping("/create", "application/json")
   suspend fun create(
     @RequestParam(required = false) sleepDuration: Long?,
     @RequestBody(required = true) newOffender: PpudClient.NewOffender,
@@ -51,6 +51,18 @@ internal class OffenderController {
     log.info(normalizeSpace("Offender create endpoint hit $identifier"))
     return performClientOperation(sleepDuration, identifier) { ppudClient ->
       ppudClient.createOffender(newOffender)
+    }
+  }
+
+  @PostMapping("/recall", "application/json")
+  suspend fun createRecall(
+    @RequestParam(required = false) sleepDuration: Long?,
+    @RequestBody(required = true) newRecall: PpudClient.NewRecall,
+  ): PpudClient.Recall {
+    val identifier = UUID.randomUUID()
+    log.info(normalizeSpace("Recall create endpoint hit $identifier"))
+    return performClientOperation(sleepDuration, identifier) { ppudClient ->
+      ppudClient.createRecall(newRecall)
     }
   }
 
