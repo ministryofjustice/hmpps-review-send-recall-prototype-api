@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.web.reactive.function.BodyInserters
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.generateValidNewRecall
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.integration.IntegrationTestBase
 import java.time.Duration
 
@@ -39,7 +39,7 @@ class PpudIntegrationTest : IntegrationTestBase() {
     webTestClient
       .mutate().responseTimeout(Duration.ofSeconds(timeoutInSeconds)).build()
       .post().uri("/recall")
-      .body(BodyInserters.fromValue(generateNewRecall()))
+      .body(BodyInserters.fromValue(generateValidNewRecall()))
       .exchange()
       .expectStatus().is2xxSuccessful
   }
@@ -57,24 +57,5 @@ class PpudIntegrationTest : IntegrationTestBase() {
       }
     }
     println("** Test call $index done")
-  }
-
-  private fun generateNewRecall(): PpudClient.NewRecall {
-    return PpudClient.NewRecall(
-      offenderId = "4F6666656E64657269643D313937363935G722H678",
-      sentenceDate = "10/07/2014",
-      releaseDate = "27/10/2014",
-      isInCustody = true,
-      decisionDateTime = "12/06/2023 09:00",
-      receivedDateTime = "12/06/2023 11:30",
-      recommendedToOwner = "Billy BandThree",
-      policeForce = "West Yorkshire Police",
-      isPartAMissing = true,
-      isOASysMissing = true,
-      isPreSentenceReportMissing = true,
-      isPreConsMissing = true,
-      isLicenceMissing = true,
-      isChargeSheetMissing = true,
-    )
   }
 }

@@ -7,7 +7,7 @@ import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppu
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class PpudClientTest {
+abstract class PpudClientTest(val sleepDurationInMilliseconds: Long = 0) {
 
   protected val ppudUrl = "https://uat.ppud.justice.gov.uk/"
 
@@ -15,7 +15,7 @@ abstract class PpudClientTest {
 
   @BeforeEach
   fun before() {
-    ppudClient = PpudClient(ppudUrl, sleepDurationInMilliseconds = 0)
+    ppudClient = PpudClient(ppudUrl, sleepDurationInMilliseconds)
   }
 
   @AfterEach

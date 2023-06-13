@@ -14,7 +14,7 @@ class PpudClientCreateTest : PpudClientTest() {
   @Test
   fun `Given offender details when creating an offender then offender with ID is returned`() {
     val newOffender = PpudClient.NewOffender(
-      croNumber = "CRO--${UUID.randomUUID()}",
+      croNumber = "CRO-${UUID.randomUUID()}",
       nomsId = "NOMS-${UUID.randomUUID()}",
       firstNames = "John",
       familyName = "Teal-${UUID.randomUUID().toString().uppercase()}",
