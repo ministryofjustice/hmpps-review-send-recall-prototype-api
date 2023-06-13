@@ -85,6 +85,7 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
 
       val newRecallPage = NewRecallPage(driver)
       newRecallPage.createRecall(newRecall)
+      sleepIfRequired()
 
       newRecallPage.throwIfInvalid()
 
@@ -195,7 +196,9 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     val offenderId: String,
     val sentenceDate: String,
     val releaseDate: String,
+    val probationArea: String,  // According to the Job Card this should be automatically populated, but wasn't
     val isInCustody: Boolean,
+    val mappaLevel: String,     // According to the Job Card this should be automatically populated, but wasn't
     val decisionDateTime: String,
     val receivedDateTime: String,
     val recommendedToOwner: String,

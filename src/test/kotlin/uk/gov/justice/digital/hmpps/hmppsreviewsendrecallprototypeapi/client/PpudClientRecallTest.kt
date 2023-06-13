@@ -27,7 +27,9 @@ class PpudClientRecallTest : PpudClientTest(sleepDurationInMilliseconds = 3000) 
       offenderId = "4F6666656E64657269643D313937363935G722H678",
       sentenceDate = "10/07/2014",
       releaseDate = "27/10/2014",
+      probationArea = "",
       isInCustody = true,
+      mappaLevel = "",
       decisionDateTime = "",
       receivedDateTime = "",
       recommendedToOwner = "",
@@ -45,6 +47,6 @@ class PpudClientRecallTest : PpudClientTest(sleepDurationInMilliseconds = 3000) 
       }
     }.isInstanceOf(Exception::class.java)
       .hasMessageContaining("Validation Failed.")
-      .hasMessageContaining("You must select a Recall Type.")
+      .hasMessageContaining("You must select a Probation Area.")
   }
 }

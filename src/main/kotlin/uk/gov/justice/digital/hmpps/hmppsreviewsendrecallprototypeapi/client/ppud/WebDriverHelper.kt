@@ -27,14 +27,22 @@ fun initialiseDriver(): WebDriver {
   return WebDriverManager.firefoxdriver().capabilities(options).create()
 }
 
-fun setDropdownOptionIfNotBlank(dropdown: WebElement?, option: String?) {
+fun enterInputTextIfNotBlank(input: WebElement?, text: String?) {
+  if (text?.isNotBlank() == true && input != null) {
+    input.sendKeys(text)
+  }
+}
+
+fun selectCheckboxValue(checkbox: WebElement?, value: Boolean) {
+  if ((checkbox?.isSelected == true && value.not())
+    || (checkbox?.isSelected == false && value))   {
+    checkbox.click()
+  }
+}
+
+fun selectDropdownOptionIfNotBlank(dropdown: WebElement?, option: String?) {
   if (option?.isNotBlank() == true && dropdown != null) {
     Select(dropdown).selectByVisibleText(option)
   }
 }
 
-fun setInputTextIfNotBlank(input: WebElement?, text: String?) {
-  if (text?.isNotBlank() == true && input != null) {
-    input.sendKeys(text)
-  }
-}

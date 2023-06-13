@@ -11,8 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.setDropdownOptionIfNotBlank
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.setInputTextIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.enterInputTextIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.selectDropdownOptionIfNotBlank
 import java.time.Duration
 
 class NewOffenderPage(private val driver: WebDriver) {
@@ -100,22 +100,22 @@ class NewOffenderPage(private val driver: WebDriver) {
     dismissCheckCapitalisationAlert()
     dateOfBirthInput?.click()
     dateOfBirthInput?.sendKeys(newOffender.dateOfBirth)
-    setDropdownOptionIfNotBlank(prisonerCategoryDropdown, "Not Applicable")
+    selectDropdownOptionIfNotBlank(prisonerCategoryDropdown, "Not Applicable")
     prisonNumberInput?.sendKeys(newOffender.prisonNumber)
-    setDropdownOptionIfNotBlank(ethnicityDropdown, newOffender.ethnicity)
-    setDropdownOptionIfNotBlank(immigrationStatusDropdown, "Not Applicable")
-    setDropdownOptionIfNotBlank(genderDropdown, newOffender.gender)
-    setDropdownOptionIfNotBlank(statusDropdown, "Recalled [*]")
+    selectDropdownOptionIfNotBlank(ethnicityDropdown, newOffender.ethnicity)
+    selectDropdownOptionIfNotBlank(immigrationStatusDropdown, "Not Applicable")
+    selectDropdownOptionIfNotBlank(genderDropdown, newOffender.gender)
+    selectDropdownOptionIfNotBlank(statusDropdown, "Recalled [*]")
     dateOfSentenceInput?.click()
-    setInputTextIfNotBlank(dateOfSentenceInput, newOffender.dateOfSentence)
-    setInputTextIfNotBlank(sentencingCourtInput, newOffender.sentencingCourt)
-    setDropdownOptionIfNotBlank(sentencedUnderDropdown, newOffender.sentencedUnder)
+    enterInputTextIfNotBlank(dateOfSentenceInput, newOffender.dateOfSentence)
+    enterInputTextIfNotBlank(sentencingCourtInput, newOffender.sentencingCourt)
+    selectDropdownOptionIfNotBlank(sentencedUnderDropdown, newOffender.sentencedUnder)
 
     // Complete fields that have been updated/refreshed.
     // This is a hacky solution but will do for now
     delay(2000)
-    setDropdownOptionIfNotBlank(indexOffenceDropdown, newOffender.indexOffence)
-    setDropdownOptionIfNotBlank(mappaLevelDropdown, newOffender.mappaLevel)
+    selectDropdownOptionIfNotBlank(indexOffenceDropdown, newOffender.indexOffence)
+    selectDropdownOptionIfNotBlank(mappaLevelDropdown, newOffender.mappaLevel)
 
     saveButton?.click()
   }
