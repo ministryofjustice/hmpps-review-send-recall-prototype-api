@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.setDropdownOptionIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.setInputTextIfNotBlank
 import java.time.Duration
 
 class NewOffenderPage(private val driver: WebDriver) {
@@ -121,18 +123,6 @@ class NewOffenderPage(private val driver: WebDriver) {
   fun throwIfInvalid() {
     if (validationSummary?.text?.isNotBlank() == true) {
       throw Exception("Validation Failed.${System.lineSeparator()}${validationSummary?.text}")
-    }
-  }
-
-  private fun setDropdownOptionIfNotBlank(dropdown: WebElement?, option: String?) {
-    if (option?.isNotBlank() == true && dropdown != null) {
-      Select(dropdown).selectByVisibleText(option)
-    }
-  }
-
-  private fun setInputTextIfNotBlank(input: WebElement?, text: String?) {
-    if (text?.isNotBlank() == true && input != null) {
-      input.sendKeys(text)
     }
   }
 

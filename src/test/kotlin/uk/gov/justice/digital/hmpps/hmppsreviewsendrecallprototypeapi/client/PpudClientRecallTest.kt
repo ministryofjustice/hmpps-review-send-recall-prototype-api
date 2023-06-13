@@ -45,6 +45,6 @@ class PpudClientRecallTest : PpudClientTest(sleepDurationInMilliseconds = 3000) 
       }
     }.isInstanceOf(Exception::class.java)
       .hasMessageContaining("Validation Failed.")
-      .hasMessageContaining("You must enter a decision time.")
+      .hasMessageContaining("You must select a Recall Type.")
   }
 }

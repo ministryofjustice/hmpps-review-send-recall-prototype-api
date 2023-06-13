@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver
 import org.slf4j.LoggerFactory
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.NewOffenderPage
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.NewRecallPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.OffenderPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.SearchPage
 
@@ -78,6 +79,14 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
       val offenderPage = OffenderPage(driver)
       offenderPage.navigateTo(ppudUrl, newRecall.offenderId)
       sleepIfRequired()
+
+      offenderPage.navigateToNewRecallFor(newRecall.sentenceDate, newRecall.releaseDate)
+      sleepIfRequired()
+
+      val newRecallPage = NewRecallPage(driver)
+      newRecallPage.createRecall(newRecall)
+
+      newRecallPage.throwIfInvalid()
 
       return Recall("")
     } catch (e: Exception) {

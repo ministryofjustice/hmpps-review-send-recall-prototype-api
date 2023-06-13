@@ -2,7 +2,9 @@ package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.pp
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
 import org.openqa.selenium.firefox.FirefoxOptions
+import org.openqa.selenium.support.ui.Select
 
 fun initialiseDriver(): WebDriver {
   // Needed to address failure to establish WebSocket in Chrome 111+
@@ -23,4 +25,16 @@ fun initialiseDriver(): WebDriver {
   }
 
   return WebDriverManager.firefoxdriver().capabilities(options).create()
+}
+
+fun setDropdownOptionIfNotBlank(dropdown: WebElement?, option: String?) {
+  if (option?.isNotBlank() == true && dropdown != null) {
+    Select(dropdown).selectByVisibleText(option)
+  }
+}
+
+fun setInputTextIfNotBlank(input: WebElement?, text: String?) {
+  if (text?.isNotBlank() == true && input != null) {
+    input.sendKeys(text)
+  }
 }
