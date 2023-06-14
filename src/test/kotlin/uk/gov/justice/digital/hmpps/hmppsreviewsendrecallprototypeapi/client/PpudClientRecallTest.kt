@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.generateValidNewRecall
 
-class PpudClientRecallTest : PpudClientTest(sleepDurationInMilliseconds = 3000) {
+class PpudClientRecallTest : PpudClientTest() {
 
   @Test
   fun `Given recall details when creating a recall then recall with ID is returned`() {
@@ -18,7 +18,7 @@ class PpudClientRecallTest : PpudClientTest(sleepDurationInMilliseconds = 3000) 
       ppudClient.createRecall(newRecall)
     }
     assertThat(result.id, isNullOrBlank.not())
-    assertThat(result.id.length, equalTo(42))
+    assertThat(result.id.length, equalTo(76))
   }
 
   @Test
@@ -34,12 +34,7 @@ class PpudClientRecallTest : PpudClientTest(sleepDurationInMilliseconds = 3000) 
       receivedDateTime = "",
       recommendedToOwner = "",
       policeForce = "",
-      isPartAMissing = true,
-      isOASysMissing = true,
-      isPreSentenceReportMissing = true,
-      isPreConsMissing = true,
-      isLicenceMissing = true,
-      isChargeSheetMissing = true,
+      missingDocuments = emptySet(),
     )
     assertThatThrownBy {
       runBlocking {

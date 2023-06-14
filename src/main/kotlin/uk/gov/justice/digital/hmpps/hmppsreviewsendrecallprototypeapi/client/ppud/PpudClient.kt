@@ -5,8 +5,8 @@ import org.openqa.selenium.WebDriver
 import org.slf4j.LoggerFactory
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.NewOffenderPage
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.NewRecallPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.OffenderPage
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.RecallPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.SearchPage
 
 class PpudClient(private val ppudUrl: String, private val sleepDurationInMilliseconds: Long) {
@@ -83,13 +83,13 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
       offenderPage.navigateToNewRecallFor(newRecall.sentenceDate, newRecall.releaseDate)
       sleepIfRequired()
 
-      val newRecallPage = NewRecallPage(driver)
-      newRecallPage.createRecall(newRecall)
+      val recallPage = RecallPage(driver)
+      recallPage.createRecall(newRecall)
       sleepIfRequired()
 
-      newRecallPage.throwIfInvalid()
+      recallPage.throwIfInvalid()
 
-      return Recall("")
+      return recallPage.extractRecallDetails()
     } catch (e: Exception) {
       log.error("Exception creating new recall.", e)
       throw e
@@ -203,11 +203,6 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     val receivedDateTime: String,
     val recommendedToOwner: String,
     val policeForce: String,
-    val isPartAMissing: Boolean,
-    val isOASysMissing: Boolean,
-    val isPreSentenceReportMissing: Boolean,
-    val isPreConsMissing: Boolean,
-    val isLicenceMissing: Boolean,
-    val isChargeSheetMissing: Boolean,
+    val missingDocuments: Set<MandatoryDocument>,
   )
 }

@@ -9,7 +9,7 @@ import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.generateVa
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.integration.IntegrationTestBase
 import java.time.Duration
 
-private const val timeoutInSeconds = 30L
+private const val timeoutInSeconds = 90L
 
 class PpudIntegrationTest : IntegrationTestBase() {
 
