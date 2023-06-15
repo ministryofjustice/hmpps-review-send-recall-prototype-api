@@ -89,6 +89,9 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
 
       recallPage.throwIfInvalid()
 
+      recallPage.addMinute(newRecall)
+      sleepIfRequired()
+
       return recallPage.extractRecallDetails()
     } catch (e: Exception) {
       log.error("Exception creating new recall.", e)
@@ -204,5 +207,7 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
     val recommendedToOwner: String,
     val policeForce: String,
     val missingDocuments: Set<MandatoryDocument>,
+    val isExtendedSentence: Boolean,
+    val riskOfSeriousHarmLevel: RiskOfSeriousHarmLevel,
   )
 }

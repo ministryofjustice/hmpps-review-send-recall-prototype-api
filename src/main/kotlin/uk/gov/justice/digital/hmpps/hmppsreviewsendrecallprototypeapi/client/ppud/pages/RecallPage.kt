@@ -85,6 +85,12 @@ class RecallPage(private val driver: WebDriver) {
   private val addMinuteButton: WebElement?
     get() = driver.findElements(By.id("cntDetails_PageFooter1_Minutes1_btnReplyTop")).firstOrNull()
 
+  private val minuteEditor: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_Minutes1_MinutesTextRich_tw"))
+
+  private val saveMinuteButton: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_Minutes1_btnSave"))
+
   private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
   private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
@@ -143,6 +149,14 @@ class RecallPage(private val driver: WebDriver) {
     saveButton?.click()
   }
 
+  suspend fun addMinute(newRecall: PpudClient.NewRecall) {
+    delay(1000)
+    addMinuteButton?.click()
+    minuteEditor.click()
+    minuteEditor.sendKeys(generateMinuteText(newRecall))
+    saveMinuteButton.click()
+  }
+
   private fun checkMissingMandatoryDocuments(missingDocuments: Collection<MandatoryDocument>) {
     selectCheckboxValue(missingPartACheckbox, missingDocuments.contains(MandatoryDocument.PartA))
     selectCheckboxValue(missingOaSysCheckbox, missingDocuments.contains(MandatoryDocument.OaSys))
@@ -171,6 +185,23 @@ class RecallPage(private val driver: WebDriver) {
     if (validationSummary?.text?.isNotBlank() == true) {
       throw Exception("Validation Failed.${System.lineSeparator()}${validationSummary?.text}")
     }
+  }
+
+  private fun generateMinuteText(newRecall: PpudClient.NewRecall): String {
+    val extended = if (newRecall.isExtendedSentence) {
+      "YES"
+    } else {
+      "NO"
+    }
+    val custody = if (newRecall.isInCustody) {
+      "YES at HMP"
+    } else {
+      "NO"
+    }
+    return "BACKGROUND INFO ${System.lineSeparator()}" +
+      "Extended sentence: $extended${System.lineSeparator()}" +
+      "Risk of Serious Harm Level: ${newRecall.riskOfSeriousHarmLevel.name.uppercase()}${System.lineSeparator()}" +
+      "In custody: $custody"
   }
 
   fun extractRecallDetails(): PpudClient.Recall {

@@ -7,6 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.RiskOfSeriousHarmLevel
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.generateValidNewRecall
 
 class PpudClientRecallTest : PpudClientTest() {
@@ -35,6 +36,8 @@ class PpudClientRecallTest : PpudClientTest() {
       recommendedToOwner = "",
       policeForce = "",
       missingDocuments = emptySet(),
+      isExtendedSentence = false,
+      riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.High,
     )
     assertThatThrownBy {
       runBlocking {

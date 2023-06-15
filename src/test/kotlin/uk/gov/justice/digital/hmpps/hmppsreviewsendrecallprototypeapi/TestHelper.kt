@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi
 
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.MandatoryDocument
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.RiskOfSeriousHarmLevel
 
 fun generateValidNewRecall(): PpudClient.NewRecall {
   return PpudClient.NewRecall(
@@ -23,5 +24,7 @@ fun generateValidNewRecall(): PpudClient.NewRecall {
       MandatoryDocument.Licence,
       MandatoryDocument.ChargeSheet,
     ),
+    isExtendedSentence = false,
+    riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.Low
   )
 }
