@@ -13,6 +13,10 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
 
+  mvc:
+    async:
+      request-timeout: 60000
+
   profiles:
     group:
       test:
