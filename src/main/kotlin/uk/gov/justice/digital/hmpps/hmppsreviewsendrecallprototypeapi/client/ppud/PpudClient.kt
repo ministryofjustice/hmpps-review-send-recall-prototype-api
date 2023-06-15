@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud
 
-import kotlinx.coroutines.delay
 import org.openqa.selenium.WebDriver
 import org.slf4j.LoggerFactory
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.LoginPage
@@ -9,9 +8,13 @@ import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppu
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.RecallPage
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.pages.SearchPage
 
-class PpudClient(private val ppudUrl: String, private val sleepDurationInMilliseconds: Long) {
+class PpudClient(private val ppudUrl: String, sleepDurationInMilliseconds: Long) {
 
   private val driver: WebDriver = initialiseDriver()
+
+  init {
+      WebDriverSleepDurationInMilliseconds = sleepDurationInMilliseconds
+  }
 
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -160,10 +163,6 @@ class PpudClient(private val ppudUrl: String, private val sleepDurationInMillise
       searchPage.clearFields()
       searchPage.searchByPersonalDetails(familyName, dateOfBirth)
     }
-  }
-
-  private suspend fun sleepIfRequired() {
-    delay(sleepDurationInMilliseconds)
   }
 
   data class Offender(

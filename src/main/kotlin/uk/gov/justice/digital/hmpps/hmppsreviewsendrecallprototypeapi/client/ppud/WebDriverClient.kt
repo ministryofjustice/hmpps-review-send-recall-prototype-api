@@ -1,10 +1,13 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud
 
 import io.github.bonigarcia.wdm.WebDriverManager
+import kotlinx.coroutines.delay
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.ui.Select
+
+var WebDriverSleepDurationInMilliseconds: Long = 0
 
 fun initialiseDriver(): WebDriver {
   // Needed to address failure to establish WebSocket in Chrome 111+
@@ -27,6 +30,10 @@ fun initialiseDriver(): WebDriver {
   return WebDriverManager.firefoxdriver().capabilities(options).create()
 }
 
+suspend fun sleepIfRequired() {
+  delay(WebDriverSleepDurationInMilliseconds)
+}
+
 fun enterInputTextIfNotBlank(input: WebElement?, text: String?) {
   if (text?.isNotBlank() == true && input != null) {
     input.sendKeys(text)
@@ -35,7 +42,8 @@ fun enterInputTextIfNotBlank(input: WebElement?, text: String?) {
 
 fun selectCheckboxValue(checkbox: WebElement?, value: Boolean) {
   if ((checkbox?.isSelected == true && value.not())
-    || (checkbox?.isSelected == false && value))   {
+    || (checkbox?.isSelected == false && value)
+  ) {
     checkbox.click()
   }
 }

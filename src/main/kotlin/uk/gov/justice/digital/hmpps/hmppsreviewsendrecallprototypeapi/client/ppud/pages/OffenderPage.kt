@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.sleepIfRequired
 
 class OffenderPage(private val driver: WebDriver) {
 
@@ -46,7 +47,7 @@ class OffenderPage(private val driver: WebDriver) {
     driver.get("$ppudUrl/Offender/PersonalDetails.aspx?data=$offenderId")
   }
 
-  fun navigateToNewRecallFor(sentenceDate: String, releaseDate: String) {
+  suspend fun navigateToNewRecallFor(sentenceDate: String, releaseDate: String) {
     val navigationElement = driver.findElement(By.id("navigation"))
     val navigationTreeView = navigationElement.findElement(By.id("T_ctl00treetvOffender"))
 
@@ -63,6 +64,7 @@ class OffenderPage(private val driver: WebDriver) {
     val recalls = releaseChildren.findElementWithTextContaining("Recalls")
     val recallsChildren = expandNode(recalls)
     val newRecallElement = recallsChildren.findElementWithTextContaining("New")
+    sleepIfRequired()
     newRecallElement.click()
 
     // We perhaps want to write this like this...
@@ -72,7 +74,7 @@ class OffenderPage(private val driver: WebDriver) {
     //      .expandNodeWithText("Releases")
     //      .expandNodeWithTextContaining(releaseDate)
     //      .expandNodeWithText("Recalls")
-    //      .findNodeWithWithTextContaining("New")
+    //      .findNodeWithTextContaining("New")
     //      .click()
   }
 

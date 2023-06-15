@@ -25,6 +25,6 @@ fun generateValidNewRecall(): PpudClient.NewRecall {
       MandatoryDocument.ChargeSheet,
     ),
     isExtendedSentence = false,
-    riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.Low
+    riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.Low,
   )
 }

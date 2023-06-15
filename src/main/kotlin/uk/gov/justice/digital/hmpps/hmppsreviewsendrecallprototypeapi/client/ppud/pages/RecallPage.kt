@@ -11,6 +11,7 @@ import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppu
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.enterInputTextIfNotBlank
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.selectCheckboxValue
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.selectDropdownOptionIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.sleepIfRequired
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -133,7 +134,6 @@ class RecallPage(private val driver: WebDriver) {
     val recommendedToDate = LocalDateTime.now().format(dateTimeFormatter)
     enterInputTextIfNotBlank(recommendedToDateInput, recommendedToDate)
     selectDropdownOptionIfNotBlank(policeForceDropdown, newRecall.policeForce)
-    delay(2000)
     if (newRecall.isInCustody) {
       selectDropdownOptionIfNotBlank(returnToCustodyNotificationMethodDropdown, "Already in custody")
     }
@@ -150,10 +150,11 @@ class RecallPage(private val driver: WebDriver) {
   }
 
   suspend fun addMinute(newRecall: PpudClient.NewRecall) {
-    delay(1000)
+    delay(1000) // Wait for save to be processed. HACK: Can we use selenium waits?
     addMinuteButton?.click()
     minuteEditor.click()
     minuteEditor.sendKeys(generateMinuteText(newRecall))
+    sleepIfRequired()
     saveMinuteButton.click()
   }
 
