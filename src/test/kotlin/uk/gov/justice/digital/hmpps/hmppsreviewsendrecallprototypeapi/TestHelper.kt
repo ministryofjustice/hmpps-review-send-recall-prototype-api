@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi
 
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.MandatoryDocument
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.RiskOfSeriousHarmLevel
 
@@ -16,14 +15,6 @@ fun generateValidNewRecall(documents: List<PpudClient.DocumentForUpload> = empty
     receivedDateTime = "12/06/2023 11:30",
     recommendedToOwner = "Peter Jones(WAM - Panel Member)",
     policeForce = "West Yorkshire Police",
-    missingDocuments = setOf(
-      MandatoryDocument.PartA,
-      MandatoryDocument.OaSys,
-      MandatoryDocument.PreSentenceReport,
-      MandatoryDocument.PreviousConvictions,
-      MandatoryDocument.Licence,
-      MandatoryDocument.ChargeSheet,
-    ),
     documents = documents,
     isExtendedSentence = false,
     riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.Low,

@@ -48,7 +48,6 @@ class PpudClientRecallTest : PpudClientTest() {
       receivedDateTime = "",
       recommendedToOwner = "",
       policeForce = "",
-      missingDocuments = emptySet(),
       isExtendedSentence = false,
       riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.High,
       documents = emptyList(),

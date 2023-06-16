@@ -208,11 +208,14 @@ class PpudClient(private val ppudUrl: String, sleepDurationInMilliseconds: Long)
     val receivedDateTime: String,
     val recommendedToOwner: String,
     val policeForce: String,
-    val missingDocuments: Set<MandatoryDocument>,
     val documents: List<DocumentForUpload>,
     val isExtendedSentence: Boolean,
     val riskOfSeriousHarmLevel: RiskOfSeriousHarmLevel,
-  )
+  ) {
+    val missingDocuments: Set<MandatoryDocument> =
+      MandatoryDocument.values()
+        .subtract(documents.map { it.documentType }.toSet())
+  }
 
   data class DocumentForUpload(
     val documentType: MandatoryDocument,
