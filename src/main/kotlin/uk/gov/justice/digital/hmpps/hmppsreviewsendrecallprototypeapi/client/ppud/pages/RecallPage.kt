@@ -92,6 +92,36 @@ class RecallPage(private val driver: WebDriver) {
   private val saveMinuteButton: WebElement
     get() = driver.findElement(By.id("cntDetails_PageFooter1_Minutes1_btnSave"))
 
+  private val uploadDocumentButton: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_cmdUploadDoc"))
+
+  private val deliveryActualInput: WebElement
+    get() = driver.findElement(By.id("igtxtcntDetails_PageFooter1_docEdit_dteDELIVERY_ACTUAL"))
+
+  private val documentTitleInput: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_docEdit_txtDOCUMENT_TITLE"))
+
+  private val replyActualInput: WebElement
+    get() = driver.findElement(By.id("igtxtcntDetails_PageFooter1_docEdit_dteREPLY_ACTUAL"))
+
+  private val documentTypeDropdown: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_docEdit_ddliDOCUMENT_TYPE"))
+
+  private val chooseFileInput: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_docEdit_fUpDocuments"))
+
+  private val saveAndAddMoreDocumentsButton: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_docEdit_cmdSaveAndAdd"))
+
+  private val closeDocumentUploadButton: WebElement
+    get() = driver.findElement(By.id("cntDetails_PageFooter1_docEdit_cmdCancel"))
+
+  private val documentUploadStatusTable: WebElement
+    get() = driver.findElement(By.id("UploadStatusData"))
+
+  private val documentUploadStatuses: List<WebElement>
+    get() = documentUploadStatusTable.findElements(By.xpath(".//td[starts-with(@id, 'upload_1')]"))
+
   private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
   private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
@@ -149,8 +179,33 @@ class RecallPage(private val driver: WebDriver) {
     saveButton?.click()
   }
 
+  suspend fun uploadDocuments(documents: List<PpudClient.DocumentForUpload>) {
+    delay(1000) // Wait for save to be processed. HACK: Can we use selenium waits better?
+    val today = LocalDateTime.now().format(dateFormatter)
+    uploadDocumentButton.click()
+    for (document in documents) {
+      deliveryActualInput.sendKeys(today)
+      selectDropdownOptionIfNotBlank(documentTypeDropdown, "301 - Post Release Recall")
+      documentTitleInput.sendKeys(generateDocumentTitle(document.documentType))
+      replyActualInput.sendKeys(today)
+      chooseFileInput.sendKeys(document.path)
+      saveAndAddMoreDocumentsButton.click()
+      waitForDocumentToUpload()
+    }
+    closeDocumentUploadButton.click()
+  }
+
+  private suspend fun waitForDocumentToUpload() {
+    var timeout = 15000L
+    val interval = 250L
+    while (documentUploadStatuses.any { it.text != "Complete" } && timeout > 0) {
+      delay(interval)
+      timeout -= interval
+    }
+  }
+
   suspend fun addMinute(newRecall: PpudClient.NewRecall) {
-    delay(1000) // Wait for save to be processed. HACK: Can we use selenium waits?
+    delay(1000) // Wait for save to be processed. HACK: Can we use selenium waits better?
     addMinuteButton?.click()
     minuteEditor.click()
     minuteEditor.sendKeys(generateMinuteText(newRecall))
@@ -185,6 +240,17 @@ class RecallPage(private val driver: WebDriver) {
   fun throwIfInvalid() {
     if (validationSummary?.text?.isNotBlank() == true) {
       throw Exception("Validation Failed.${System.lineSeparator()}${validationSummary?.text}")
+    }
+  }
+
+  private fun generateDocumentTitle(documentType: MandatoryDocument): String {
+    return when (documentType) {
+      MandatoryDocument.PartA -> "Part A"
+      MandatoryDocument.OaSys -> "OASys"
+      MandatoryDocument.PreSentenceReport -> "PSR"
+      MandatoryDocument.PreviousConvictions -> "Pre Cons"
+      MandatoryDocument.Licence -> "Licence"
+      MandatoryDocument.ChargeSheet -> "Charge Sheet"
     }
   }
 

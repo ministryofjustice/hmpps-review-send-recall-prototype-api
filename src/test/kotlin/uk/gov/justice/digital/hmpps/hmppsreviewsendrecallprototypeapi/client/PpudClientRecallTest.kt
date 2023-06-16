@@ -6,15 +6,28 @@ import com.natpryce.hamkrest.isNullOrBlank
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.MandatoryDocument
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.RiskOfSeriousHarmLevel
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.generateValidNewRecall
+import java.io.File
 
 class PpudClientRecallTest : PpudClientTest() {
 
   @Test
   fun `Given recall details when creating a recall then recall with ID is returned`() {
-    val newRecall = generateValidNewRecall()
+    val documents = listOf(
+      PpudClient.DocumentForUpload(
+        MandatoryDocument.PartA,
+        File("src/test/test-data/Part A Document.docx").absolutePath,
+      ),
+      PpudClient.DocumentForUpload(
+        MandatoryDocument.OaSys,
+        File("src/test/test-data/OASys Document.pdf").absolutePath,
+      ),
+    )
+    val newRecall = generateValidNewRecall(documents)
+
     val result = runBlocking {
       ppudClient.createRecall(newRecall)
     }
@@ -38,6 +51,7 @@ class PpudClientRecallTest : PpudClientTest() {
       missingDocuments = emptySet(),
       isExtendedSentence = false,
       riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.High,
+      documents = emptyList(),
     )
     assertThatThrownBy {
       runBlocking {

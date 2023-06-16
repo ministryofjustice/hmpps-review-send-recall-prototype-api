@@ -4,11 +4,11 @@ import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppu
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.RiskOfSeriousHarmLevel
 
-fun generateValidNewRecall(): PpudClient.NewRecall {
+fun generateValidNewRecall(documents: List<PpudClient.DocumentForUpload> = emptyList()): PpudClient.NewRecall {
   return PpudClient.NewRecall(
-    offenderId = "4F6666656E64657269643D313937363935G722H678",
-    sentenceDate = "10/07/2014",
-    releaseDate = "27/10/2014",
+    offenderId = "4F6666656E64657269643D313236313234G709H670",
+    sentenceDate = "12/06/2008",
+    releaseDate = "07/01/2009",
     probationArea = "PS - Accrington",
     isInCustody = true,
     mappaLevel = "Level 1 – Multi-Agency Support",
@@ -24,6 +24,7 @@ fun generateValidNewRecall(): PpudClient.NewRecall {
       MandatoryDocument.Licence,
       MandatoryDocument.ChargeSheet,
     ),
+    documents = documents,
     isExtendedSentence = false,
     riskOfSeriousHarmLevel = RiskOfSeriousHarmLevel.Low,
   )

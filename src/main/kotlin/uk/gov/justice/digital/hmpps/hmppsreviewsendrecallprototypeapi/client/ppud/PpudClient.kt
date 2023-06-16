@@ -13,7 +13,7 @@ class PpudClient(private val ppudUrl: String, sleepDurationInMilliseconds: Long)
   private val driver: WebDriver = initialiseDriver()
 
   init {
-      WebDriverSleepDurationInMilliseconds = sleepDurationInMilliseconds
+    WebDriverSleepDurationInMilliseconds = sleepDurationInMilliseconds
   }
 
   companion object {
@@ -91,6 +91,9 @@ class PpudClient(private val ppudUrl: String, sleepDurationInMilliseconds: Long)
       sleepIfRequired()
 
       recallPage.throwIfInvalid()
+
+      recallPage.uploadDocuments(newRecall.documents)
+      sleepIfRequired()
 
       recallPage.addMinute(newRecall)
       sleepIfRequired()
@@ -198,15 +201,21 @@ class PpudClient(private val ppudUrl: String, sleepDurationInMilliseconds: Long)
     val offenderId: String,
     val sentenceDate: String,
     val releaseDate: String,
-    val probationArea: String,  // According to the Job Card this should be automatically populated, but wasn't
+    val probationArea: String, // According to the Job Card this should be automatically populated, but wasn't
     val isInCustody: Boolean,
-    val mappaLevel: String,     // According to the Job Card this should be automatically populated, but wasn't
+    val mappaLevel: String, // According to the Job Card this should be automatically populated, but wasn't
     val decisionDateTime: String,
     val receivedDateTime: String,
     val recommendedToOwner: String,
     val policeForce: String,
     val missingDocuments: Set<MandatoryDocument>,
+    val documents: List<DocumentForUpload>,
     val isExtendedSentence: Boolean,
     val riskOfSeriousHarmLevel: RiskOfSeriousHarmLevel,
+  )
+
+  data class DocumentForUpload(
+    val documentType: MandatoryDocument,
+    val path: String,
   )
 }
