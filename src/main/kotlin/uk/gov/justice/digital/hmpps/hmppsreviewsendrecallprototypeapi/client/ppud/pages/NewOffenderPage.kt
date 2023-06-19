@@ -11,8 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.enterInputTextIfNotBlank
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.selectDropdownOptionIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.selenium.enterInputTextIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.selenium.selectDropdownOptionIfNotBlank
 import java.time.Duration
 
 class NewOffenderPage(private val driver: WebDriver) {

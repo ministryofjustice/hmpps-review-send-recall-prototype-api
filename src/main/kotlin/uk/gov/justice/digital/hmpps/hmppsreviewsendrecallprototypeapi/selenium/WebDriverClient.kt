@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud
+package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.selenium
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import kotlinx.coroutines.delay
@@ -41,8 +41,8 @@ fun enterInputTextIfNotBlank(input: WebElement?, text: String?) {
 }
 
 fun selectCheckboxValue(checkbox: WebElement?, value: Boolean) {
-  if ((checkbox?.isSelected == true && value.not())
-    || (checkbox?.isSelected == false && value)
+  if ((checkbox?.isSelected == true && value.not()) ||
+    (checkbox?.isSelected == false && value)
   ) {
     checkbox.click()
   }
@@ -54,3 +54,6 @@ fun selectDropdownOptionIfNotBlank(dropdown: WebElement?, option: String?) {
   }
 }
 
+fun WebElement?.getValue(): String {
+  return this?.getAttribute("value")?.trim() ?: ""
+}

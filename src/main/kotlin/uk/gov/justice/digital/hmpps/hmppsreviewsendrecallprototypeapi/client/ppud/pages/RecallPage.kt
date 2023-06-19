@@ -8,10 +8,10 @@ import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.MandatoryDocument
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.enterInputTextIfNotBlank
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.selectCheckboxValue
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.selectDropdownOptionIfNotBlank
-import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.sleepIfRequired
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.selenium.enterInputTextIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.selenium.selectCheckboxValue
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.selenium.selectDropdownOptionIfNotBlank
+import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.selenium.sleepIfRequired
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
