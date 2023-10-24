@@ -20,7 +20,7 @@ class PpudClientCreateTest : PpudClientTest() {
       familyName = "Teal-${UUID.randomUUID().toString().uppercase()}",
       dateOfBirth = "12/12/1985",
       indexOffence = "OTHER DRUGS OFFENCES",
-      mappaLevel = "Level 2 – Multi-Agency Management", // This is a specific type of hyphen, not "minus"
+      mappaLevel = "Level 3 – MAPPP", // This is a specific type of hyphen, not "minus"
       prisonNumber = "PRISON-NUMBER-${UUID.randomUUID()}",
       ethnicity = "White – Other", // This is a specific type of hyphen, not "minus"
       gender = "M",

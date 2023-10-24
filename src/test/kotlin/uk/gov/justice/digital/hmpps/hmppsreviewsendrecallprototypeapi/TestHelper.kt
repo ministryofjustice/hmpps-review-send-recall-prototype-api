@@ -5,15 +5,15 @@ import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppu
 
 fun generateValidNewRecall(documents: List<PpudClient.DocumentForUpload> = emptyList()): PpudClient.NewRecall {
   return PpudClient.NewRecall(
-    offenderId = "4F6666656E64657269643D313236313234G709H670",
-    sentenceDate = "12/06/2008",
-    releaseDate = "07/01/2009",
-    probationArea = "PS - Accrington",
+    offenderId = "4F6666656E64657249643D313731383133G688H664",
+    sentenceDate = "16/10/2023",
+    releaseDate = "17/10/2023",
+    probationArea = "PS - Croydon",
     isInCustody = true,
-    mappaLevel = "Level 1 – Multi-Agency Support",
+    mappaLevel = "Level 3 – MAPPP",
     decisionDateTime = "12/06/2023 09:10",
     receivedDateTime = "12/06/2023 11:30",
-    recommendedToOwner = "Peter Jones(WAM - Panel Member)",
+    recommendedToOwner = "Peter Bowes(WAM - Panel Member)",
     policeForce = "West Yorkshire Police",
     documents = documents,
     isExtendedSentence = false,

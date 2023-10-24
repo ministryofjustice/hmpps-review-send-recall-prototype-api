@@ -1,12 +1,7 @@
 package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client
 
-import com.natpryce.hamkrest.allElements
+import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.caseInsensitive
-import com.natpryce.hamkrest.containsSubstring
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.greaterThan
-import com.natpryce.hamkrest.isEmpty
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
@@ -16,9 +11,9 @@ class PpudClientSearchTest : PpudClientTest() {
   @Test
   fun `Given an existing NOMS ID when searching for an offender then details are returned`() {
     ppudClient = PpudClient(ppudUrl, sleepDurationInMilliseconds = 0)
-    val nomsId = "A8273DJ"
-    val expectedFirstNames = "Daisy"
-    val expectedFamilyName = "Owens"
+    val nomsId = "A1234AB"
+    val expectedFirstNames = "James"
+    val expectedFamilyName = "Bond"
     val results = searchForOffender(nomsId = nomsId)
     assertThat(results.size, equalTo(1))
     val actualOffender = results.first()
@@ -28,9 +23,9 @@ class PpudClientSearchTest : PpudClientTest() {
 
   @Test
   fun `Given an existing CRO Number when searching for an offender then details are returned`() {
-    val croNumber = "86/107775E/0"
-    val expectedFirstNames = "Steve"
-    val expectedFamilyName = "Amber"
+    val croNumber = "08/5159AB"
+    val expectedFirstNames = "Percival"
+    val expectedFamilyName = "Peabody"
     val results = searchForOffender(croNumber = croNumber)
     assertThat(results.size, equalTo(1))
     val actualOffender = results.first()
@@ -40,9 +35,9 @@ class PpudClientSearchTest : PpudClientTest() {
 
   @Test
   fun `Given an existing family name and date of birth when searching for an offender then details are returned`() {
-    val expectedDateOfBirth = "30/11/1984"
-    val expectedFirstNames = "Charlotte"
-    val expectedFamilyName = "Lilac"
+    val expectedDateOfBirth = "14/08/1952"
+    val expectedFirstNames = "Graham"
+    val expectedFamilyName = "Green"
     val results = searchForOffender(familyName = expectedFamilyName, dateOfBirth = expectedDateOfBirth)
     assertThat(results.size, equalTo(1))
     val actualOffender = results.first()
@@ -53,8 +48,8 @@ class PpudClientSearchTest : PpudClientTest() {
 
   @Test
   fun `Given search criteria for existing offender when searching for an offender then returned offender includes unique identifier`() {
-    val nomsId = "A8273DJ"
-    val expectedId = "4F6666656E64657269643D313230323533G709H667"
+    val nomsId = "A1234AB"
+    val expectedId = "4F6666656E64657269643D313633333636G717H671"
     val results = searchForOffender(nomsId = nomsId)
     assertThat(results.size, equalTo(1))
     val actualOffender = results.first()

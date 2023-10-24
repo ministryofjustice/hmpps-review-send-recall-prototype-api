@@ -3,12 +3,7 @@ package uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.controlle
 import org.apache.commons.lang3.StringUtils.normalizeSpace
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import uk.gov.justice.digital.hmpps.hmppsreviewsendrecallprototypeapi.client.ppud.PpudClient
 import java.util.*
 
@@ -16,7 +11,7 @@ import java.util.*
 @RequestMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
 internal class OffenderController {
 
-  val ppudUrl = "https://uat.ppud.justice.gov.uk/"
+  val ppudUrl = "https://internaltest.ppud.justice.gov.uk/"
 
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)

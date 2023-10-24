@@ -17,7 +17,8 @@ import java.time.format.DateTimeFormatter
 
 class RecallPage(private val driver: WebDriver) {
 
-  @FindBy(id = "cntDetails_PageFooter1_cmdSave")
+  // TODO: Used to be captioned Save, but now, in InternalTest it's Merge
+  @FindBy(id = "cntDetails_PageFooter1_cmdMerge")
   private val saveButton: WebElement? = null
 
   @FindBy(id = "cntDetails_ddliRECALL_TYPE")
@@ -139,13 +140,17 @@ class RecallPage(private val driver: WebDriver) {
     val recommendedToOwnerSearchable = newRecall.recommendedToOwner.takeWhile { (it == '(').not() }
     recommendedToOwnerInput?.click()
     enterInputTextIfNotBlank(recommendedToOwnerInput, recommendedToOwnerSearchable)
-    val revocationIssuedByOwner = "EO Recall(Recall Team)"
+    // TODO: This used to be "EO Recall(Recall Team)" but was changed to "EO Officer(Not Specified)" to work with InternalTest.
+    // TODO: Need to investigate how this field should be handled.
+    val revocationIssuedByOwner = "EO Officer(Not Specified)"
     val revocationIssuedByOwnerSearchable = revocationIssuedByOwner.takeWhile { (it == '(').not() }
     revocationIssuedByOwnerInput?.click()
     enterInputTextIfNotBlank(revocationIssuedByOwnerInput, revocationIssuedByOwnerSearchable)
 
     // Complete standalone fields
-    selectDropdownOptionIfNotBlank(recallTypeDropdown, "To be determined")
+    // TODO: This used to be "To be determined" but was changed to "Standard" to work with InternalTest.
+    // TODO: Need to investigate how this field should be handled.
+    selectDropdownOptionIfNotBlank(recallTypeDropdown, "Standard")
     selectDropdownOptionIfNotBlank(
       probationAreaDropdown,
       newRecall.probationArea,
@@ -165,7 +170,9 @@ class RecallPage(private val driver: WebDriver) {
     enterInputTextIfNotBlank(recommendedToDateInput, recommendedToDate)
     selectDropdownOptionIfNotBlank(policeForceDropdown, newRecall.policeForce)
     if (newRecall.isInCustody) {
-      selectDropdownOptionIfNotBlank(returnToCustodyNotificationMethodDropdown, "Already in custody")
+      // TODO: This used to be "Already in custody" but was changed to "Not Applicable" to work with InternalTest.
+      // TODO: Need to investigate how this field should be handled.
+      selectDropdownOptionIfNotBlank(returnToCustodyNotificationMethodDropdown, "Not Applicable")
     }
     selectMandatoryDocumentsReceivedDropdown(newRecall.missingDocuments)
     checkMissingMandatoryDocuments(newRecall.missingDocuments)

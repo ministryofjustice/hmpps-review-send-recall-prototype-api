@@ -9,7 +9,7 @@ import java.util.*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class PpudClientTest(val sleepDurationInMilliseconds: Long = 0) {
 
-  protected val ppudUrl = "https://uat.ppud.justice.gov.uk/"
+  protected val ppudUrl = "https://internaltest.ppud.justice.gov.uk/"
 
   protected lateinit var ppudClient: PpudClient
 

@@ -38,9 +38,9 @@ class PpudClientRecallTest : PpudClientTest() {
   @Test
   fun `Given invalid recall details when creating a recall then exception is thrown with validation details`() {
     val newRecall = PpudClient.NewRecall(
-      offenderId = "4F6666656E64657269643D313937363935G722H678",
-      sentenceDate = "10/07/2014",
-      releaseDate = "27/10/2014",
+      offenderId = "4F6666656E64657249643D313731383133G688H664",
+      sentenceDate = "16/10/2023",
+      releaseDate = "17/10/2023",
       probationArea = "",
       isInCustody = true,
       mappaLevel = "",
