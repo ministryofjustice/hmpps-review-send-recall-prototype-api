@@ -114,8 +114,8 @@ class PpudClient(private val ppudUrl: String, sleepDurationInMilliseconds: Long)
 
   private fun logIn() {
     val loginPage = LoginPage(driver).verifyOn()
-    val userName = System.getenv("HMPPS_PPUD_USERNAME") ?: throw Exception("Username environment variable not set")
-    val password = System.getenv("HMPPS_PPUD_PASSWORD") ?: throw Exception("Password environment variable not set")
+    val userName = System.getenv("PPUD_USERNAME") ?: throw Exception("Username environment variable not set")
+    val password = System.getenv("PPUD_PASSWORD") ?: throw Exception("Password environment variable not set")
 
     loginPage.login(userName, password)
   }
